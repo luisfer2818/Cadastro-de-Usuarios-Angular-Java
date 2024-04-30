@@ -1,47 +1,75 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit } from '@angular/core';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
+import { listUsers } from '../models/users';
 import { UsuarioService } from './../services/usuario.service';
-
-export interface PeriodicElement {
-  id: number;
-  name: string;
-  email: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  { id: 1, name: 'Hydrogen', email: 'teste@email.com' },
-  { id: 2, name: 'Helium', email: 'teste1@gmail.com' },
-  { id: 3, name: 'Lithium', email: 'teste2@hotmail.com' },
-  { id: 4, name: 'Beryllium', email: 'teste3@hotmail.com' },
-  { id: 5, name: 'Boron', email: 'teste4@hotmail.com' },
-  { id: 6, name: 'Carbon', email: 'teste@hotmail.com' },
-  { id: 7, name: 'Nitrogen', email: 'teste@hotmail.com' },
-  { id: 8, name: 'Oxygen', email: 'teste@hotmail.com' },
-  { id: 9, name: 'Fluorine', email: 'teste@hotmail.com' },
-];
 
 @Component({
   selector: 'app-table-users',
   templateUrl: './table-users.component.html',
   styleUrls: ['./table-users.component.css'],
 })
-export class TableUsersComponent implements OnInit, AfterViewInit {
-  constructor(private usuarioService: UsuarioService) {}
+export class TableUsersComponent implements OnInit {
+  listAllUsers: Observable<listUsers> | any;
 
-  displayedColumns: string[] = ['id', 'name', 'email'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  displayedColumns: string[] = ['id', 'nome', 'email', 'actions'];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  horizontalPositionMessage: MatSnackBarHorizontalPosition = 'center';
+  verticalPositionMessage: MatSnackBarVerticalPosition = 'top';
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
+  constructor(
+    private usuarioService: UsuarioService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
-    this.usuarioService.getFindAll().subscribe(
-      (res) => console.log('URL', res),
-      (error) => console.log('error', error)
+    this.searchUsers();
+  }
+
+  searchUsers() {
+    this.usuarioService.getFindAllUsers().subscribe(
+      (res) => {
+        this.listAllUsers = res;
+        console.log('listAllUsers', this.listAllUsers);
+      },
+      (error) => {
+        this.OnErrorMessage(error);
+      }
     );
+  }
+
+  deleteUsers(id: number) {
+    return this.usuarioService.getDeleteUsers(id).subscribe(
+      (res) => {
+        this.listAllUsers = this.listAllUsers.filter((item: { id: number }) => {
+          this.OnSuccessMessage('Usuário deletado com sucesso!');
+          return id !== item.id;
+        });
+      },
+      (error) => {
+        this.OnErrorMessage(error);
+      }
+    );
+  }
+
+  private OnErrorMessage(error: any) {
+    console.log('error', error);
+    this.snackBar.open(error.error.error, '', {
+      duration: 5000,
+      horizontalPosition: this.horizontalPositionMessage,
+      verticalPosition: this.verticalPositionMessage,
+    });
+  }
+
+  private OnSuccessMessage(message: string) {
+    this.snackBar.open(message, '', {
+      duration: 5000,
+      horizontalPosition: this.horizontalPositionMessage,
+      verticalPosition: this.verticalPositionMessage,
+    });
   }
 }

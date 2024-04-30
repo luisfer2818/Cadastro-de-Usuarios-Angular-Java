@@ -1,16 +1,23 @@
 <div class="container text-center">
-  <form [formGroup]="formUser" (ngSubmit)="onSubmit()">
+  <form [formGroup]="formUser" (ngSubmit)="submitForm()">
     <div class="form-container">
       <mat-form-field appearance="outline">
         <mat-label>Digite seu nome completo</mat-label>
         <input
           matInput
           placeholder="Digite aqui"
-          formControlName="name"
+          formControlName="nome"
           required
         />
-        <mat-error *ngIf="formUser.invalid">{{ getErrorMessage() }}</mat-error>
-        <!-- <app-form-field-error [formControl]="formUser.get('name')" /> -->
+        <mat-error *ngIf="formUser.get('nome')?.hasError('required')"
+          >Este campo é obrigatório</mat-error
+        >
+        <mat-error *ngIf="formUser.get('nome')?.hasError('minlength')"
+          >Este campo deve ter no mínimo 3 caracteres</mat-error
+        >
+        <mat-error *ngIf="formUser.get('nome')?.hasError('maxlength')"
+          >Este campo deve ter no máximo 50 caracteres</mat-error
+        >
       </mat-form-field>
     </div>
 
@@ -22,8 +29,12 @@
         formControlName="email"
         required
       />
-      <!-- <app-form-field-error [formControl]="formUser.get('email')" /> -->
-      <!-- <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error> -->
+      <mat-error *ngIf="formUser.get('email')?.hasError('required')"
+        >Este campo é obrigatório</mat-error
+      >
+      <mat-error *ngIf="formUser.get('email')?.hasError('email')"
+        >Digite um e-mail válido</mat-error
+      >
     </mat-form-field>
 
     <div class="form-container">
@@ -32,7 +43,7 @@
         <input
           matInput
           [type]="hide ? 'password' : 'text'"
-          formControlName="password"
+          formControlName="senha"
         />
         <button
           mat-icon-button
@@ -43,7 +54,15 @@
         >
           <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
         </button>
-        <!-- <mat-error *ngIf="password.invalid">{{ getErrorMessage() }}</mat-error> -->
+        <mat-error *ngIf="formUser.get('senha')?.hasError('required')"
+          >Este campo é obrigatório</mat-error
+        >
+        <mat-error *ngIf="formUser.get('senha')?.hasError('minlength')"
+          >Este campo deve ter no mínimo 6 caracteres</mat-error
+        >
+        <mat-error *ngIf="formUser.get('senha')?.hasError('maxlength')"
+          >Este campo deve ter no máximo 20 caracteres</mat-error
+        >
       </mat-form-field>
     </div>
 
@@ -53,7 +72,7 @@
         <input
           matInput
           [type]="hide ? 'password' : 'text'"
-          formControlName="confirmPassword"
+          formControlName="confirmacaoSenha"
         />
         <button
           mat-icon-button
@@ -64,9 +83,22 @@
         >
           <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
         </button>
-        <!-- <mat-error *ngIf="confirmPassword.invalid">{{
-          getErrorMessage()
-        }}</mat-error> -->
+        <mat-error
+          *ngIf="formUser.get('confirmacaoSenha')?.hasError('required')"
+          >Este campo é obrigatório</mat-error
+        >
+        <mat-error
+          *ngIf="formUser.get('confirmacaoSenha')?.hasError('minlength')"
+          >Este campo deve ter no mínimo 6 caracteres</mat-error
+        >
+        <!-- <mat-error
+          *ngIf="formUser.get('confirmacaoSenha')?.hasError('MatchPassword')"
+          >Senhas tem que ser iguais</mat-error
+        > -->
+        <mat-error
+          *ngIf="formUser.get('confirmacaoSenha')?.hasError('maxlength')"
+          >Este campo deve ter no máximo 20 caracteres</mat-error
+        >
       </mat-form-field>
     </div>
 
@@ -75,7 +107,7 @@
         mat-raised-button
         color="primary"
         class="btn-default"
-        [disabled]="!formUser.valid"
+        [disabled]="formUser.invalid"
       >
         Cadastrar
       </button>

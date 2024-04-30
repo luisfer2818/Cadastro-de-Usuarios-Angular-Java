@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
+import { UsuarioService } from './../services/usuario.service';
 
 @Component({
   selector: 'app-form-field',
@@ -8,38 +14,61 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class FormFieldComponent {
   hide = true;
+  horizontalPositionMessage: MatSnackBarHorizontalPosition = 'center';
+  verticalPositionMessage: MatSnackBarVerticalPosition = 'top';
+
+  constructor(
+    private usuarioService: UsuarioService,
+    private snackBar: MatSnackBar
+  ) {}
 
   formUser = new FormGroup({
-    name: new FormControl('', [
+    nome: new FormControl('', [
       Validators.required,
       Validators.minLength(3),
       Validators.maxLength(50),
     ]),
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [
+    senha: new FormControl('', [
       Validators.required,
       Validators.minLength(6),
       Validators.maxLength(20),
     ]),
-    confirmPassword: new FormControl('', [
+    confirmacaoSenha: new FormControl('', [
       Validators.required,
       Validators.minLength(6),
       Validators.maxLength(20),
     ]),
   });
 
-  onSubmit() {}
-
-  getErrorMessage() {
-    if (
-      this.formUser.hasError('required')
-      // this.email.hasError('required'),
-      // this.password.hasError('required'),
-      // this.confirmPassword.hasError('required'))
-    ) {
-      return 'Campo obrigatório!';
+  submitForm() {
+    if (this.formUser.valid) {
+      console.log('formUser', this.formUser.value);
+      this.usuarioService.getSaveUsers(this.formUser.value).subscribe(
+        (res) => {
+          this.OnSuccessMessage('Usuário salvo com sucesso!');
+        },
+        (error) => {
+          this.OnErrorMessage(error);
+        }
+      );
     }
+  }
 
-    return this.formUser.hasError('email') ? 'Digite um e-mail válido' : '';
+  private OnErrorMessage(error: any) {
+    console.log('error', error);
+    this.snackBar.open(error.error.error, '', {
+      duration: 5000,
+      horizontalPosition: this.horizontalPositionMessage,
+      verticalPosition: this.verticalPositionMessage,
+    });
+  }
+
+  private OnSuccessMessage(message: string) {
+    this.snackBar.open(message, '', {
+      duration: 5000,
+      horizontalPosition: this.horizontalPositionMessage,
+      verticalPosition: this.verticalPositionMessage,
+    });
   }
 }
