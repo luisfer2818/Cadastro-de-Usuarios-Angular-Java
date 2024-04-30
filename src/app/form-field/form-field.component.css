@@ -10,3 +10,8 @@ mat-form-field {
   position: relative;
   left: 25%;
 }
+
+.btn-default {
+  height: 47px;
+  border-radius: 7px;
+}

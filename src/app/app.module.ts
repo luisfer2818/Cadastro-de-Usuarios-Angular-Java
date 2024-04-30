@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -8,6 +9,11 @@ import { AppComponent } from './app.component';
 // Components
 import { FormFieldComponent } from './form-field/form-field.component';
 import { HomeComponent } from './home/home.component';
+import { TableUsersComponent } from './table-users/table-users.component';
+import { ToolbarHomeComponent } from './toolbar-home/toolbar-home.component';
+
+// Modules
+import { SharedModule } from './shared/shared.module';
 
 // Angular material
 import { MatButtonModule } from '@angular/material/button';
@@ -19,8 +25,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { TableUsersComponent } from './table-users/table-users.component';
-import { ToolbarHomeComponent } from './toolbar-home/toolbar-home.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +49,8 @@ import { ToolbarHomeComponent } from './toolbar-home/toolbar-home.component';
     MatDividerModule,
     MatGridListModule,
     MatToolbarModule,
+    HttpClientModule,
+    SharedModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

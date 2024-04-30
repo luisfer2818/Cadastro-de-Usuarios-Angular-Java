@@ -1,6 +1,7 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { UsuarioService } from './../services/usuario.service';
 
 export interface PeriodicElement {
   id: number;
@@ -25,7 +26,9 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './table-users.component.html',
   styleUrls: ['./table-users.component.css'],
 })
-export class TableUsersComponent implements AfterViewInit {
+export class TableUsersComponent implements OnInit, AfterViewInit {
+  constructor(private usuarioService: UsuarioService) {}
+
   displayedColumns: string[] = ['id', 'name', 'email'];
   dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
 
@@ -33,5 +36,12 @@ export class TableUsersComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  }
+
+  ngOnInit(): void {
+    this.usuarioService.getFindAll().subscribe(
+      (res) => console.log('URL', res),
+      (error) => console.log('error', error)
+    );
   }
 }
