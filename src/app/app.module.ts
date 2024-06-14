@@ -7,8 +7,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 // Components
+import { EncurtarUrlComponent } from './encurtar-url/encurtar-url.component';
 import { FormFieldComponent } from './form-field/form-field.component';
 import { HomeComponent } from './home/home.component';
+import { TableUrlsComponent } from './table-urls/table-urls.component';
 import { TableUsersComponent } from './table-users/table-users.component';
 import { ToolbarHomeComponent } from './toolbar-home/toolbar-home.component';
 
@@ -23,8 +25,10 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
@@ -34,6 +38,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     HomeComponent,
     TableUsersComponent,
     ToolbarHomeComponent,
+    EncurtarUrlComponent,
+    TableUrlsComponent,
   ],
   imports: [
     BrowserModule,
@@ -52,6 +58,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatToolbarModule,
     HttpClientModule,
     MatSnackBarModule,
+    MatTabsModule,
+    MatProgressSpinnerModule,
     SharedModule,
   ],
   providers: [],

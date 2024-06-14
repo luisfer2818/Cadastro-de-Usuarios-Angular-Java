@@ -5,6 +5,7 @@ import {
   MatSnackBarHorizontalPosition,
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
+import { Users } from '../models/users';
 import { UsuarioService } from './../services/usuario.service';
 
 @Component({
@@ -13,7 +14,8 @@ import { UsuarioService } from './../services/usuario.service';
   styleUrls: ['./form-field.component.css'],
 })
 export class FormFieldComponent {
-  hide = true;
+  hide1 = true;
+  hide2 = true;
   horizontalPositionMessage: MatSnackBarHorizontalPosition = 'center';
   verticalPositionMessage: MatSnackBarVerticalPosition = 'top';
 
@@ -44,7 +46,7 @@ export class FormFieldComponent {
   submitForm() {
     if (this.formUser.valid) {
       console.log('formUser', this.formUser.value);
-      this.usuarioService.getSaveUsers(this.formUser.value).subscribe(
+      this.usuarioService.getSaveUsers(this.formUser.value as Users).subscribe(
         (res) => {
           this.OnSuccessMessage('Usuário salvo com sucesso!');
         },

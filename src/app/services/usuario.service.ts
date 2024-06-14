@@ -7,30 +7,30 @@ import { Users } from '../models/users';
   providedIn: 'root',
 })
 export class UsuarioService {
-  private url: string = 'http://localhost:8080/';
+  private urlApiJava: string = '/api/';
 
   constructor(private http: HttpClient) {}
 
   public getFindAllUsers(): Observable<Users> {
-    return this.http.get<Users>(`${this.url}usuarios`);
+    return this.http.get<Users>(`${this.urlApiJava}/usuarios`);
   }
 
-  public getSaveUsers(user: any): Observable<Users> {
-    return this.http.post<Users>(`${this.url}usuarios`, { user }).pipe(
+  public getSaveUsers(user: Users): Observable<Users> {
+    return this.http.post<Users>(`${this.urlApiJava}usuarios`, { user }).pipe(
       (res) => res,
       (error) => error
     );
   }
 
   public getUpdateUsers(req: any, id: number): Observable<Users> {
-    return this.http.put<Users>(`${this.url}usuarios/${id}`, req).pipe(
+    return this.http.put<Users>(`${this.urlApiJava}usuarios/${id}`, req).pipe(
       (res) => res,
       (error) => error
     );
   }
 
   public getDeleteUsers(id: number): Observable<Users> {
-    return this.http.delete<Users>(`${this.url}usuarios/${id}`).pipe(
+    return this.http.delete<Users>(`${this.urlApiJava}usuarios/${id}`).pipe(
       (res) => res,
       (error) => error
     );

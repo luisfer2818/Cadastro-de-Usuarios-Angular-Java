@@ -1,40 +1,46 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   MatSnackBar,
   MatSnackBarHorizontalPosition,
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
-import { listUsers } from '../models/users';
-import { UsuarioService } from './../services/usuario.service';
+import { UrlService } from './../services/url.service';
 
 @Component({
-  selector: 'app-table-users',
-  templateUrl: './table-users.component.html',
-  styleUrls: ['./table-users.component.css'],
+  selector: 'app-table-urls',
+  templateUrl: './table-urls.component.html',
+  styleUrls: ['./table-urls.component.css'],
 })
-export class TableUsersComponent implements OnInit {
-  listAllUsers: Observable<listUsers> | any;
+export class TableUrlsComponent implements OnInit {
+  listAllUrls!: Observable<any>;
+  @Input() recarregarListaUrls: boolean = false;
 
-  displayedColumns: string[] = ['id', 'nome', 'email', 'actions'];
+  displayedColumns: string[] = [
+    'id',
+    'url_curta',
+    'url_original',
+    'hash',
+    'createdAt',
+    'acoes',
+  ];
 
   horizontalPositionMessage: MatSnackBarHorizontalPosition = 'center';
   verticalPositionMessage: MatSnackBarVerticalPosition = 'top';
 
-  constructor(
-    private usuarioService: UsuarioService,
-    private snackBar: MatSnackBar
-  ) {}
+  constructor(private urlService: UrlService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
-    // this.searchUsers();
+    if (this.recarregarListaUrls) {
+      this.searchUrls();
+    }
   }
 
-  searchUsers() {
-    this.usuarioService.getFindAllUsers().subscribe(
+  searchUrls() {
+    this.urlService.getFindAllUrls().subscribe(
       (res) => {
-        this.listAllUsers = res;
-        console.log('listAllUsers', this.listAllUsers);
+        this.listAllUrls = res;
+        console.log('listAllUrls', this.listAllUrls);
       },
       (error) => {
         this.OnErrorMessage(error);
@@ -42,15 +48,13 @@ export class TableUsersComponent implements OnInit {
     );
   }
 
-  deleteUsers(id: number) {
-    console.log('id', id);
-    return this.usuarioService.getDeleteUsers(id).subscribe(
+  deletarUrl(hash: string) {
+    console.log('hash', hash);
+    return this.urlService.getDeleteUrl(hash).subscribe(
       (res) => {
         console.log('res', res);
-        this.listAllUsers = this.listAllUsers.filter((item: { id: number }) => {
-          this.OnSuccessMessage('Usuário deletado com sucesso!');
-          return id !== item.id;
-        });
+        this.OnSuccessMessage('Url deletada com sucesso!');
+        this.searchUrls();
       },
       (error) => {
         this.OnErrorMessage(error);

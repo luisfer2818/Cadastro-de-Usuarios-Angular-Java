@@ -1,0 +1,37 @@
+<div class="container">
+  <h2 class="text-center my-2 py-2 fw-semibold">Encurtador de URL</h2>
+  <form [formGroup]="formUrl" (ngSubmit)="encurtarUrl()">
+    <div class="form-container">
+      <div class="row col-12 py-3 my-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Digite sua URL para encurtar</mat-label>
+          <input
+            matInput
+            placeholder="Digite aqui"
+            formControlName="originalUrl"
+            required
+          />
+          <mat-error *ngIf="formUrl.get('originalUrl')?.hasError('required')"
+            >Este campo é obrigatório</mat-error
+          >
+          <mat-error *ngIf="formUrl.get('originalUrl')?.hasError('minlength')"
+            >Este campo deve ter no mínimo 1 caracteres</mat-error
+          >
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col">
+      <button
+        mat-raised-button
+        color="primary"
+        class="btn-default"
+        [disabled]="formUrl.invalid"
+      >
+        Encurtar URL
+      </button>
+    </div>
+  </form>
+  <hr />
+  <app-table-urls [recarregarListaUrls]="true" />
+  <mat-progress-spinner *ngIf="listUrls"> </mat-progress-spinner>
+</div>
